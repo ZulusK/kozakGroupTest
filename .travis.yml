@@ -12,6 +12,7 @@ install:
 before_script:
   - mongo testKozakGroup --eval 'db.createUser({user:"app",pwd:"123456",roles:["readWrite"]});'
 script:
+  - npm run test
   - npm run test:coverage
   - codecov
 after_success:

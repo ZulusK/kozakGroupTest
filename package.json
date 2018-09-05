@@ -13,7 +13,6 @@
     "dev": "cross-env NODE_ENV=development nodemon index.js",
     "debug": "cross-env NODE_ENV=development node --nolazy --inspect-brk=9229 index.js",
     "nodemon-debug": "cross-env NODE_ENV=development nodemon --debug --inspect-brk=9229 index.js",
-    "precommit": "yarn lint && yarn test",
     "lint": "esw *.js  . --color",
     "lint:watch": "yarn lint -- --watch",
     "test": "cross-env NODE_ENV=test ./node_modules/.bin/_mocha --opts ./test/mocha.opts server",
