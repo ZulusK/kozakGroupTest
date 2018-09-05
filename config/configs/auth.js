@@ -5,8 +5,6 @@ const envVarsSchema = Joi.object({
   NODE_ENV: Joi.string()
     .allow(['development', 'production', 'test', 'provision'])
     .default('development'),
-  EMAIL_ADDRESS: Joi.string().required(),
-  EMAIL_PASSWORD: Joi.string().required(),
   JWT_REFRESH_EXP: Joi.number()
     .when('NODE_ENV', {
       is: Joi.string().equal('test'),
@@ -42,9 +40,7 @@ const config = {
   jwtSecretAccessDriver: envVars.JWT_SECRET_ACCESS_DRIVER,
   jwtSecretRefreshDriver: envVars.JWT_SECRET_REFRESH_DRIVER,
   jwtExpAccess: envVars.JWT_ACCESS_EXP,
-  jwtExpRefresh: envVars.JWT_REFRESH_EXP,
-  emailAddress: envVars.EMAIL_ADDRESS,
-  emailPassword: envVars.EMAIL_PASSWORD
+  jwtExpRefresh: envVars.JWT_REFRESH_EXP
 };
 
 module.exports = config;
