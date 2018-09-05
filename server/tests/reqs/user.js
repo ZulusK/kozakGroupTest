@@ -4,6 +4,9 @@ const queryString = require('query-string');
 const httpStatus = require('http-status');
 
 module.exports = {
+  getById: ({ accessToken, userId }) => request(app)
+    .get(`/api/users/${userId}`)
+    .set('Authorization', `bearer ${accessToken}`),
   getInfo: accessToken => request(app)
     .get('/api/auth/login')
     .set('Authorization', `bearer ${accessToken}`),
