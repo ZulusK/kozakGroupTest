@@ -17,8 +17,8 @@
     "lint:watch": "yarn lint -- --watch",
     "test": "cross-env NODE_ENV=test ./node_modules/.bin/_mocha --opts ./test/mocha.opts server",
     "test:watch": "yarn test -- --watch",
-    "test:coverage": "cross-env NODE_ENV=test ./node_modules/.bin/istanbul cover _mocha -- --opts ./test/mocha.opts server",
-    "test:coverage:ci": "cross-env NODE_ENV=test ./node_modules/.bin/istanbul cover _mocha -- --opts ./test/mocha.opts --reporter lcovonly server"
+    "test:coverage": "cross-env NODE_ENV=test ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha -- --opts ./test/mocha.opts server",
+    "test:coverage:ci": "cross-env NODE_ENV=test ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha -- --opts ./test/mocha.opts --report lcovonly server"
   },
   "repository": {
     "type": "git",
