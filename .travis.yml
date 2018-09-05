@@ -7,8 +7,9 @@ notifications:
     on_success: never
     on_failure: never
 install:
-  - npm install -g codecov
-  - npm install -g cross-env
+  - npm i
+  - npm i -g codecov
+  - npm i -g cross-env
 before_script:
   - mongo testKozakGroup --eval 'db.createUser({user:"app",pwd:"123456",roles:["readWrite"]});'
 script:
