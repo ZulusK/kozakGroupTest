@@ -30,7 +30,7 @@ describe('## User APIs', () => {
   before('clean DB', testTools.cleanup);
   after('clean DB', testTools.cleanup);
   describe('# POST /api/users', testUserCreation);
-  // describe('# PUT /api/users/:id', testUserUpdate);
+  describe('# PUT /api/users/:id', testUserUpdate);
 });
 
 function testUserCreation() {
@@ -115,7 +115,7 @@ function testUserUpdate() {
     });
     it('should return 400 ( invalid id )', (done) => {
       reqs.user
-        .update({ userid: 'not-an-id', accessToken: auth.access })
+        .update({ userId: 'not-an-id', accessToken: auth.access })
         .then((res) => {
           expect(res.status).to.be.eq(httpStatus.BAD_REQUEST);
           done();
