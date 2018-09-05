@@ -28,7 +28,8 @@ env:
     MONGO_HOST=mongodb://localhost:27017/testKozakGroup
     NODE_ENV=test \
     MONGO_USER=app \
-    MONGO_PSW=123456
+    MONGO_PSW=123456 \
+    ENABLE_LOG=true
 deploy:
   provider: heroku
   strategy: git

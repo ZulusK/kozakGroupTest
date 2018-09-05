@@ -1,5 +1,9 @@
 # Kozak Group Test Task
 
+| Master                                                                           | Develop                                                                       |
+| -------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| [![Build Status][travis-master]](https://travis-ci.org/ZulusK/kozakGroupTest-be) | [![Build Status][travis-dev]](https://travis-ci.org/ZulusK/kozakGroupTest-be) |
+
 ## Documentation
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/9fdbbb16b4493c7db5e9)
@@ -106,3 +110,8 @@ Get code coverage summary on executing `yarn test`
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+[codecov-dev]: https://codecov.io/gh/ZulusK/kozakGroupTest-be/branch/dev/graph/badge.svg "Code coverage develop"
+[codecov-master]: https://codecov.io/gh/ZulusK/kozakGroupTest-be/branch/master/graph/badge.svg "Code coverage master"
+[travis-dev]: https://travis-ci.org/ZulusK/kozakGroupTest-be.svg?branch=develop "Travis CI build status on develop"
+[travis-master]: https://travis-ci.org/ZulusK/kozakGroupTest-be.svg?branch=master "Travis CI build status on master"

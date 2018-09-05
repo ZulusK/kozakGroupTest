@@ -15,7 +15,7 @@ const envVarsSchema = Joi.object({
   }),
   HOST: Joi.string().when('NODE_ENV', {
     is: Joi.string().equal('production'),
-    then: Joi.string().default('some host'),
+    then: Joi.string().default('https://kozak-group-test.herokuapp.com'),
     otherwise: Joi.string().default('http://127.0.0.1:3000')
   })
 })
