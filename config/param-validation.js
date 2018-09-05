@@ -1,5 +1,4 @@
 const JoiExt = require('../server/helpers/joi-extensions');
-const config = require('./config');
 
 const Joi = require('joi').extend([
   JoiExt.Email,

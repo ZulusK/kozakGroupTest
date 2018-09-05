@@ -1,6 +1,5 @@
 const request = require('supertest-as-promised');
 const app = require('../../../index');
-const queryString = require('query-string');
 const httpStatus = require('http-status');
 
 module.exports = {

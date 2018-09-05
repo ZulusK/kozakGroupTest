@@ -3,7 +3,6 @@ const Worker = require('../../worker/worker.model');
 const log = require('../../../config/winston').getLogger({ module });
 const usersData = require('./usersData');
 const workersData = require('./workersData');
-const _ = require('lodash');
 
 async function fillUserDB() {
   const users = await Promise.all(usersData.map(x => new User(x).save()));
