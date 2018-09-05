@@ -1,8 +1,7 @@
 const Worker = require('./worker.model');
 const helpers = require('../helpers');
-
-// const APIError = require('../helpers/APIError');
-// const httpStatus = require('http-status');
+const log = require('../../config/winston').getLogger({ name: 'worker:ctrl' });
+const debug = require('debug')('app:worker:ctrl');
 
 /**
  * Load entity and append it to req
@@ -14,6 +13,7 @@ const helpers = require('../helpers');
 const load = (req, res, next, id) => Worker.get(id)
   .then((worker) => {
     req.$worker = worker; // eslint-disable-line no-param-reassign
+    debug('LOAD worker %O', worker);
     return next();
   })
   .catch(e => next(e));
@@ -23,7 +23,10 @@ const load = (req, res, next, id) => Worker.get(id)
  * @param {Express.Request} req request object
  * @param {Express.Response} res response object
  */
-const get = (req, res) => res.json(req.$worker.toJSON());
+const get = (req, res) => {
+  debug('GET worker %O', req.$worker);
+  return res.json(req.$worker.toJSON());
+};
 
 /**
  * Create new entity
@@ -41,6 +44,7 @@ const create = async (req, res, next) => {
       salary: req.body.salary
     });
     const savedWorker = await worker.save();
+    log.info('new worker created %s', savedWorker.id);
     return res.json(savedWorker.toJSON());
   } catch (err) {
     return next(err);
@@ -63,6 +67,7 @@ const update = async (req, res, next) => {
       'salary'
     ]);
     const savedWorker = await worker.save();
+    log.info('worker updated %s', savedWorker.id);
     return res.json(savedWorker.toJSON());
   } catch (err) {
     return next(err);
@@ -122,6 +127,7 @@ const remove = async (req, res, next) => {
   try {
     const worker = req.$worker;
     const deletedWorker = await worker.remove();
+    log.info('delete worker %s', deletedWorker.id);
     return res.json(deletedWorker.toJSON());
   } catch (err) {
     return next(err);

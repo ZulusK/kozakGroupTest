@@ -1,8 +1,7 @@
 const User = require('./user.model');
 const helpers = require('../helpers');
-
-// const APIError = require('../helpers/APIError');
-// const httpStatus = require('http-status');
+const log = require('../../config/winston').getLogger({ name: 'user:ctrl' });
+const debug = require('debug')('app:user:ctrl');
 
 /**
  * Load entity and append it to req
@@ -14,6 +13,7 @@ const helpers = require('../helpers');
 const load = (req, res, next, id) => User.get(id)
   .then((user) => {
     req.$user = user; // eslint-disable-line no-param-reassign
+    debug('LOAD user %O', user);
     return next();
   })
   .catch(e => next(e));
@@ -23,7 +23,10 @@ const load = (req, res, next, id) => User.get(id)
  * @param {Express.Request} req request object
  * @param {Express.Response} res response object
  */
-const get = (req, res) => res.json(req.$user.toJSON());
+const get = (req, res) => {
+  debug('GET user %O', req.$user);
+  return res.json(req.$user.toJSON());
+};
 
 /**
  * Create new entity
@@ -42,6 +45,7 @@ const create = async (req, res, next) => {
       email: req.body.email
     });
     const savedUser = await user.save();
+    log.info('new user created %s', savedUser.id);
     return res.json({
       user: savedUser.toJSON(),
       tokens: await savedUser.genAuthTokens()
@@ -63,6 +67,7 @@ const update = async (req, res, next) => {
     const user = req.$user;
     helpers.updateObjectWithReq(req.body, user, ['username', 'email']);
     const savedUser = await user.save();
+    log.info('user updated %s', savedUser.id);
     return res.json(savedUser.toJSON());
   } catch (err) {
     return next(err);
@@ -102,6 +107,7 @@ const remove = async (req, res, next) => {
   try {
     const user = req.$user;
     const deletedUser = await user.remove();
+    log.info('delete user %s', deletedUser.id);
     return res.json(deletedUser.toJSON());
   } catch (err) {
     return next(err);
@@ -119,6 +125,7 @@ const updatePassword = async (req, res, next) => {
     const user = req.$user;
     helpers.updateObjectWithReq(req.body, user, ['password']);
     const savedUser = await user.save();
+    log.info('user password updated %s', savedUser.id);
     return res.json(savedUser.toJSON());
   } catch (err) {
     return next(err);
