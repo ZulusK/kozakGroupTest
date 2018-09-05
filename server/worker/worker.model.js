@@ -4,7 +4,7 @@ const APIError = require('../helpers/APIError');
 const mongoosePaginate = require('mongoose-paginate');
 const privatePaths = require('../helpers/mongoose-plugins/private-paths');
 const debug = require('debug')('app:worker:model');
-const { toJSONOpt, toObjectOpt } = require('../helpers');
+const helpers = require('../helpers');
 
 /**
  * Store Schema
@@ -49,8 +49,8 @@ WorkerSchema.index({
   gender: 1
 });
 
-WorkerSchema.set('toJSON', toJSONOpt);
-WorkerSchema.set('toObject', toObjectOpt);
+WorkerSchema.set('toJSON', helpers.toJSONOpt);
+WorkerSchema.set('toObject', helpers.toObjectOpt);
 
 /**
  * Statics

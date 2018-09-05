@@ -27,8 +27,8 @@ if (error) {
 const config = {
   host: envVars.MONGO_HOST,
   debug: envVars.MONGOOSE_DEBUG,
-  password: envVars.MONGO_USER,
-  user: envVars.MONGO_PSW
+  password: envVars.MONGO_PSW,
+  user: envVars.MONGO_USER
 };
 
 module.exports = config;
