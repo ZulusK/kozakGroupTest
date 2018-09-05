@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const validators = require('./validators');
 const errorConvertor = require('./errorConverter');
+const searchQueryBuilder = require('./searchQueryBuilder');
 
 const updateObject = (src, doc, path) => {
   if (_.hasIn(src, path)) {
@@ -26,6 +27,7 @@ const toObjectOpt = toJSONOpt;
 
 module.exports = {
   validators,
+  searchQueryBuilder,
   toJSONOpt,
   toObjectOpt,
   errorConvertor,

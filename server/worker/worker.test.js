@@ -352,6 +352,9 @@ function testWorkerList() {
       });
     });
   });
+  describe('use custom query',()=>{
+      describe('test search by fullname')
+  })
 }
 function runTestCaseCreation(testCase, done) {
   return reqs.worker

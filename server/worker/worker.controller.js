@@ -68,6 +68,26 @@ const update = async (req, res, next) => {
     return next(err);
   }
 };
+
+const searchQueryList = [
+  {
+    path: 'fullname',
+    type: helpers.searchQueryBuilder.fieldTypes.CONTAINS
+  },
+  {
+    path: 'salary',
+    type: helpers.searchQueryBuilder.fieldTypes.EXACTLY
+  },
+  {
+    path: 'gender',
+    type: helpers.searchQueryBuilder.fieldTypes.EXACTLY
+  },
+  {
+    path: 'position',
+    type: helpers.searchQueryBuilder.fieldTypes.CONTAINS
+  }
+];
+
 /**
  * List entities by quey
  * @param {Express.Request} req request object
@@ -77,10 +97,12 @@ const update = async (req, res, next) => {
 const list = async (req, res, next) => {
   try {
     const { limit = 50, skip = 0, populate = false } = req.query;
+
     const paginatedResult = await Worker.list({
       limit,
       skip,
-      populate
+      populate,
+      query: helpers.searchQueryBuilder.buildSearchQuery(req.query, searchQueryList)
     });
     return res.json({
       ...paginatedResult,
