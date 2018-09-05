@@ -1,7 +1,12 @@
 const JoiExt = require('../server/helpers/joi-extensions');
 const config = require('./config');
 
-const Joi = require('joi').extend([JoiExt.Email, JoiExt.ObjectId, JoiExt.Password]);
+const Joi = require('joi').extend([
+  JoiExt.Email,
+  JoiExt.ObjectId,
+  JoiExt.Password,
+  JoiExt.MobilePhone
+]);
 
 const DEFAULT_GET_QUERY = {
   skip: Joi.number().min(0),
@@ -26,8 +31,9 @@ exports.createUser = {
     username: Joi.string()
       .trim()
       .min(2)
-      .required()
       .max(30)
+      .regex(/^\w+$/)
+      .required()
   }
 };
 // GET /api/users
@@ -44,6 +50,7 @@ exports.updateUser = {
     username: Joi.string()
       .trim()
       .min(2)
+      .regex(/^\w+$/)
       .max(30)
   }
 };
@@ -61,20 +68,53 @@ exports.updateUserPassword = {
 // POST /api/workers
 exports.creatWorker = {
   body: {
-    name: Joi.string()
+    gender: Joi.string()
+      .trim()
+      .valid('male', 'female'),
+    contacts: Joi.object().keys({
+      email: Joi.string().isEmail(),
+      mobileNumber: Joi.string().isMobileNumber()
+    }),
+    fullname: Joi.string()
+      .trim()
+      .min(2)
+      .max(40)
+      .regex(/^[a-zA-Z ]*$/)
+      .required(),
+    position: Joi.string()
       .trim()
       .min(2)
       .max(20)
+      .required(),
+    salary: Joi.number()
+      .min(0)
       .required()
   }
 };
 // PUT /api/workers/:id
 exports.updateWorker = {
   body: {
-    name: Joi.string()
+    gender: Joi.string()
+      .trim()
+      .valid('male', 'female'),
+    contacts: Joi.object().keys({
+      email: Joi.string().isEmail(),
+      mobileNumber: Joi.string().isMobileNumber()
+    }),
+    fullname: Joi.string()
+      .trim()
+      .min(2)
+      .max(40)
+      .regex(/^[a-zA-Z ]*$/)
+      .required(),
+    position: Joi.string()
       .trim()
       .min(2)
       .max(20)
+      .required(),
+    salary: Joi.number()
+      .min(0)
+      .required()
   }
 };
 // GET /api/workers

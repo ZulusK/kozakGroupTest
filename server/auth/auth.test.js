@@ -3,7 +3,7 @@ const chai = require('chai'); // eslint-disable-line import/newline-after-import
 const reqs = require('../tests/reqs');
 const expects = require('../tests/expects');
 const mongoose = require('mongoose');
-const { userData, driverData } = require('../tests/validData');
+const { userData } = require('../tests/validData');
 const testTools = require('../tests/tools');
 const config = require('../../config/config');
 

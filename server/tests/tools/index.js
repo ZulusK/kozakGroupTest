@@ -13,7 +13,7 @@ function cleanup(done) {
 }
 
 function parseAuthBody(body, auth = {}) {
-  auth.user = body.user;
+  auth.account = body.user;
   auth.access = body.tokens.access.token;
   auth.refresh = body.tokens.refresh.token;
   auth.refreshExpiredIn = body.tokens.refresh.expiredIn;

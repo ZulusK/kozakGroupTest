@@ -32,10 +32,7 @@ const WorkerSchema = new mongoose.Schema(
     },
     salary: {
       type: Number,
-      required: true
-    },
-    joinedAt: {
-      type: Date,
+      set: value => +value.toFixed(2),
       required: true
     }
   },

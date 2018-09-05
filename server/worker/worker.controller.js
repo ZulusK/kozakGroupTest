@@ -33,7 +33,13 @@ const get = (req, res) => res.json(req.$worker.toJSON());
  */
 const create = async (req, res, next) => {
   try {
-    const worker = new Worker({});
+    const worker = new Worker({
+      gender: req.body.gender,
+      fullname: req.body.fullname,
+      contacts: req.body.contacts,
+      position: req.body.position,
+      salary: req.body.salary
+    });
     const savedWorker = await worker.save();
     return res.json(savedWorker.toJSON());
   } catch (err) {
@@ -49,7 +55,13 @@ const create = async (req, res, next) => {
 const update = async (req, res, next) => {
   try {
     const worker = req.$worker;
-    helpers.updateObjectWithReq(req.body, worker, []);
+    helpers.updateObjectWithReq(req.body, worker, [
+      'gender',
+      'fullname',
+      'contacts',
+      'position',
+      'salary'
+    ]);
     const savedWorker = await worker.save();
     return res.json(savedWorker.toJSON());
   } catch (err) {
