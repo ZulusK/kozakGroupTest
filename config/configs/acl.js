@@ -48,7 +48,7 @@ const rules = {
       when: isAuthenticated
     },
     {
-      action: 'user:delete',
+      action: 'worker:delete',
       when: isAuthenticated
     }
   ]

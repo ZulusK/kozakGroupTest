@@ -40,6 +40,9 @@ module.exports = {
     .put(`/api/users/${userId}`)
     .set('Authorization', `bearer ${accessToken}`)
     .send(data),
+  delete: ({ userId, email, password }) => request(app)
+    .delete(`/api/users/${userId}`)
+    .auth(email, password),
   updatePassword: ({
     userId, data, email, password
   }) => request(app)

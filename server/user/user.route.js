@@ -10,15 +10,7 @@ const router = express.Router(); // eslint-disable-line new-cap
 const userRouter = express.Router();
 router.use('/users', userRouter);
 
-userRouter
-  .route('/')
-  .get(
-    auth.jwtUserAccess,
-    validate(paramValidation.listUsers),
-    userAccessControl.list,
-    userCtrl.list
-  )
-  .post(validate(paramValidation.createUser), userCtrl.create);
+userRouter.route('/').post(validate(paramValidation.createUser), userCtrl.create);
 
 userRouter
   .route('/:userId')
@@ -28,7 +20,8 @@ userRouter
     userAccessControl.update,
     validate(paramValidation.updateUser),
     userCtrl.update
-  );
+  )
+  .delete(auth.basicUser, userAccessControl.delete, userCtrl.delete);
 
 userRouter.put(
   '/:userId/password',

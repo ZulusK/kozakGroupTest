@@ -32,6 +32,7 @@ describe('## User APIs', () => {
   describe('# POST /api/users', testUserCreation);
   describe('# PUT /api/users/:id', testUserUpdate);
   describe('# GET /api/users/:id', testUserGetById);
+  describe('# DELETE /api/users/:id', testUserDelete);
 });
 
 function testUserCreation() {
@@ -311,6 +312,124 @@ function testUserGetById() {
           return reqs.user.getById({
             userId: auth.user.id,
             accessToken: res.body.tokens.access.token
+          });
+        })
+        .then((res) => {
+          expect(res.status).to.be.eq(httpStatus.FORBIDDEN);
+          done();
+        })
+        .catch(done);
+    });
+  });
+}
+function testUserDelete() {
+  const auth = {
+    access: null,
+    user: null,
+    refresh: null
+  };
+  beforeEach('login or create user', (done) => {
+    reqs.user
+      .createOrLogin(userData)
+      .then((res) => {
+        testTools.parseAuthBody(res.body, auth);
+        done();
+      })
+      .catch(done);
+  });
+  after('clean DB', testTools.cleanup);
+  it('should return 200 and deleted user (valid id & auth)', (done) => {
+    reqs.user
+      .delete({ userId: auth.user.id, ...userData })
+      .then((res) => {
+        expect(res.status).to.be.eq(httpStatus.OK);
+        expects.user.expectUser(res.body, copyUser(userData));
+        done();
+      })
+      .catch(done);
+  });
+  it('should return 404 on getById after deleting', (done) => {
+    reqs.user
+      .delete({ userId: auth.user.id, ...userData })
+      .then((res) => {
+        expect(res.status).to.be.eq(httpStatus.OK);
+        return reqs.user.getById({ userId: auth.user.id, accessToken: auth.access });
+      })
+      .then((res) => {
+        expect(res.status).to.be.eq(httpStatus.NOT_FOUND);
+        done();
+      })
+      .catch(done);
+  });
+  describe('invalid id', () => {
+    it('should return 404 ( new id )', (done) => {
+      reqs.user
+        .delete({ userId: ObjectId(), ...userData })
+        .then((res) => {
+          expect(res.status).to.be.eq(httpStatus.NOT_FOUND);
+          done();
+        })
+        .catch(done);
+    });
+    it('should return 400 ( invalid email )', (done) => {
+      reqs.user
+        .delete({ userId: 'not-an-id', ...userData })
+        .then((res) => {
+          expect(res.status).to.be.eq(httpStatus.BAD_REQUEST);
+          done();
+        })
+        .catch(done);
+    });
+  });
+  describe('invalid credentials', () => {
+    it('should return 401 ( bad email )', (done) => {
+      reqs.user
+        .delete({ userId: auth.user.id, ...userData, email: 'invalid@mail.com' })
+        .then((res) => {
+          expect(res.status).to.be.eq(httpStatus.UNAUTHORIZED);
+          done();
+        })
+        .catch(done);
+    });
+    it('should return 401 ( use access token instead of email & password )', (done) => {
+      reqs.user
+        .delete({ userId: auth.user.id, accessToken: auth.access })
+        .then((res) => {
+          expect(res.status).to.be.eq(httpStatus.UNAUTHORIZED);
+          done();
+        })
+        .catch(done);
+    });
+    it('should return 401 ( bad password )', (done) => {
+      reqs.user
+        .delete({ userId: auth.user.id, ...userData, password: 'invalid' })
+        .then((res) => {
+          expect(res.status).to.be.eq(httpStatus.UNAUTHORIZED);
+          done();
+        })
+        .catch(done);
+    });
+    it('should return 401 ( no auth )', (done) => {
+      reqs.user
+        .delete({ userId: auth.user.id })
+        .then((res) => {
+          expect(res.status).to.be.eq(httpStatus.UNAUTHORIZED);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should return 403 ( user is not an owner of account )', (done) => {
+      reqs.user
+        .create({
+          ...userData,
+          email: 'newUser@gmail.com'
+        })
+        .then((res) => {
+          expect(res.status).to.be.eq(httpStatus.OK);
+          return reqs.user.delete({
+            userId: res.body.user.id,
+            ...userData
           });
         })
         .then((res) => {
