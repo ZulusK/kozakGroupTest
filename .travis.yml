@@ -9,7 +9,7 @@ notifications:
 install:
   - npm install -g codecov
 before_script:
-  - mongo mydb_test --eval 'db.createUser({user:"app",pwd:"123456",roles:["readWrite"]});'
+  - mongo testKozakGroup --eval 'db.createUser({user:"app",pwd:"123456",roles:["readWrite"]});'
 script:
   - npm run test:coverage
   - codecov
@@ -23,6 +23,7 @@ cache:
 env:
   - JWT_SECRET_REFRESH_USER=tili-tili-trali-vali \
     JWT_SECRET_ACCESS_USER=HelloKittyHelloKitty \
+    MONGO_HOST=mongodb://localhost:27017/testKozakGroup
     NODE_ENV=test \
     MONGO_USER=app \
     MONGO_PSW=123456
