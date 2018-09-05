@@ -1,13 +1,10 @@
-const pug = require('pug');
 const nodemailer = require('nodemailer');
+const pug = require('pug');
 const config = require('../../config/config');
 const log = require('../../config/winston').getLogger({ name: 'mailer' });
-const path = require('path');
 const _ = require('lodash');
 
-const resetPasswordTemplateFunc = pug.compileFile(
-  path.join(config.resources, 'resetPasswordEmail.pug')
-);
+const resetPasswordTemplateFunc = pug.compileFile(config.resources.resetPasswordTemplate);
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -31,7 +28,7 @@ transporter.verify((error) => {
   }
 });
 
-function sendPasswordResetEmail({ email, url, username }) {
+const sendPasswordResetEmail = ({ email, url, username }) => {
   const renderedText = resetPasswordTemplateFunc({
     email,
     username,
@@ -45,7 +42,7 @@ function sendPasswordResetEmail({ email, url, username }) {
   };
   log.info(`Sent mail to ${email}`);
   transporter.sendMail(mail);
-}
+};
 
 module.exports = {
   // send mails only in production

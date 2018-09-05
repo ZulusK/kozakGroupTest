@@ -1,7 +1,6 @@
-const Joi = require('joi');
-const path = require('path');
-
 require('dotenv').config();
+
+const Joi = require('joi');
 
 // define validation for all the env vars
 const envVarsSchema = Joi.object({
@@ -33,12 +32,12 @@ const config = {
   isProduction: envVars.IS_PROD,
   port: envVars.PORT,
   host: envVars.HOST,
-  resources: path.join(__dirname, '../public'),
   /* eslint-disable global-require */
   auth: require('./configs/auth'),
   log: require('./configs/log'),
   mongo: require('./configs/mongo'),
-  acl: require('./configs/acl')
+  acl: require('./configs/acl'),
+  resources: require('./configs/resources')
 };
 
 module.exports = config;

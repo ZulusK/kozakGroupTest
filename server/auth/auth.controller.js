@@ -1,4 +1,4 @@
-const mailer = require('../helpers/mailer');
+const mailer = require('../services/mailer');
 
 const login = (req, res) => res.json({
   user: req.user.toJSON(),

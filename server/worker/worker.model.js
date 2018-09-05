@@ -9,9 +9,45 @@ const { toJSONOpt, toObjectOpt } = require('../helpers');
 /**
  * Store Schema
  */
-const WorkerSchema = new mongoose.Schema({}, { timestamps: true });
+const WorkerSchema = new mongoose.Schema(
+  {
+    gender: {
+      enum: ['male', 'female'],
+      type: String,
+      required: true
+    },
+    fullname: {
+      trim: true,
+      type: String,
+      required: true
+    },
+    contacts: {
+      email: String,
+      mobileNumber: String
+    },
+    position: {
+      trim: true,
+      type: String,
+      required: true
+    },
+    salary: {
+      type: Number,
+      required: true
+    },
+    joinedAt: {
+      type: Date,
+      required: true
+    }
+  },
+  { timestamps: true }
+);
 
-WorkerSchema.index({});
+WorkerSchema.index({
+  fullname: 1,
+  salary: 1,
+  position: 1,
+  gender: 1
+});
 
 WorkerSchema.set('toJSON', toJSONOpt);
 WorkerSchema.set('toObject', toObjectOpt);
