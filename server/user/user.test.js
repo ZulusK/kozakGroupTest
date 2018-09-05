@@ -92,7 +92,7 @@ function testUserCreation() {
 function testUserUpdate() {
   const auth = {
     access: null,
-    user: null,
+    account:null,
     refresh: null
   };
   beforeEach('login or create user', (done) => {
@@ -128,7 +128,7 @@ function testUserUpdate() {
   describe('invalid token', () => {
     it('should return 401 ( bad token )', (done) => {
       reqs.user
-        .update({ userId: auth.user.id, accessToken: 'Asd' })
+        .update({ userId: auth.account.id, accessToken: 'Asd' })
         .then((res) => {
           expect(res.status).to.be.eq(httpStatus.UNAUTHORIZED);
           done();
@@ -137,7 +137,7 @@ function testUserUpdate() {
     });
     it('should return 401 ( no auth )', (done) => {
       reqs.user
-        .update({ userId: auth.user.id })
+        .update({ userId: auth.account.id })
         .then((res) => {
           expect(res.status).to.be.eq(httpStatus.UNAUTHORIZED);
           done();
@@ -154,7 +154,7 @@ function testUserUpdate() {
         .then((res) => {
           expect(res.status).to.be.eq(httpStatus.OK);
           return reqs.user.update({
-            userId: auth.user.id,
+            userId: auth.account.id,
             accessToken: res.body.tokens.access.token
           });
         })
@@ -168,7 +168,7 @@ function testUserUpdate() {
   describe('test each property', () => {
     const runTestCaseUpdate = (tc, done) => reqs.user
       .update({
-        userId: auth.user.id,
+        userId: auth.account.id,
         data: tc.data,
         accessToken: auth.access
       })
@@ -182,7 +182,7 @@ function testUserUpdate() {
     expects.runTestCases({ testData: testSuitsForUser, makeReq: runTestCaseUpdate });
     const runTestCaseUpdatePassword = (tc, done) => reqs.user
       .updatePassword({
-        userId: auth.user.id,
+        userId: auth.account.id,
         data: tc.data,
         email: userData.email,
         password: userData.password
@@ -203,7 +203,7 @@ function testUserUpdate() {
           email: newEmail
         })
         .then(() => reqs.user.update({
-          userId: auth.user.id,
+          userId: auth.account.id,
           data: {
             email: newEmail
           },
@@ -220,7 +220,7 @@ function testUserUpdate() {
     it('should reject all tokens after password updating', (done) => {
       reqs.user
         .updatePassword({
-          userId: auth.user.id,
+          userId: auth.account.id,
           email: userData.email,
           password: userData.password,
           data: {
@@ -238,7 +238,7 @@ function testUserUpdate() {
 function testUserGetById() {
   const auth = {
     access: null,
-    user: null,
+    account:null,
     refresh: null
   };
   before('login or create user', (done) => {
@@ -253,7 +253,7 @@ function testUserGetById() {
   after('clean DB', testTools.cleanup);
   it('should return user (valid id & token) ', (done) => {
     reqs.user
-      .getById({ userId: auth.user.id, accessToken: auth.access })
+      .getById({ userId: auth.account.id, accessToken: auth.access })
       .then((res) => {
         expect(res.status).to.be.eq(httpStatus.OK);
         expects.user.expectUser(res.body, copyUser(userData));
@@ -284,7 +284,7 @@ function testUserGetById() {
   describe('invalid token', () => {
     it('should return 401 ( bad token )', (done) => {
       reqs.user
-        .getById({ userId: auth.user.id, accessToken: 'Asd' })
+        .getById({ userId: auth.account.id, accessToken: 'Asd' })
         .then((res) => {
           expect(res.status).to.be.eq(httpStatus.UNAUTHORIZED);
           done();
@@ -293,7 +293,7 @@ function testUserGetById() {
     });
     it('should return 401 ( no auth )', (done) => {
       reqs.user
-        .getById({ userId: auth.user.id })
+        .getById({ userId: auth.account.id })
         .then((res) => {
           expect(res.status).to.be.eq(httpStatus.UNAUTHORIZED);
           done();
@@ -310,7 +310,7 @@ function testUserGetById() {
         .then((res) => {
           expect(res.status).to.be.eq(httpStatus.OK);
           return reqs.user.getById({
-            userId: auth.user.id,
+            userId: auth.account.id,
             accessToken: res.body.tokens.access.token
           });
         })
@@ -325,7 +325,7 @@ function testUserGetById() {
 function testUserDelete() {
   const auth = {
     access: null,
-    user: null,
+    account:null,
     refresh: null
   };
   beforeEach('login or create user', (done) => {
@@ -340,7 +340,7 @@ function testUserDelete() {
   after('clean DB', testTools.cleanup);
   it('should return 200 and deleted user (valid id & auth)', (done) => {
     reqs.user
-      .delete({ userId: auth.user.id, ...userData })
+      .delete({ userId: auth.account.id, ...userData })
       .then((res) => {
         expect(res.status).to.be.eq(httpStatus.OK);
         expects.user.expectUser(res.body, copyUser(userData));
@@ -350,10 +350,10 @@ function testUserDelete() {
   });
   it('should return 404 on getById after deleting', (done) => {
     reqs.user
-      .delete({ userId: auth.user.id, ...userData })
+      .delete({ userId: auth.account.id, ...userData })
       .then((res) => {
         expect(res.status).to.be.eq(httpStatus.OK);
-        return reqs.user.getById({ userId: auth.user.id, accessToken: auth.access });
+        return reqs.user.getById({ userId: auth.account.id, accessToken: auth.access });
       })
       .then((res) => {
         expect(res.status).to.be.eq(httpStatus.NOT_FOUND);
@@ -384,7 +384,7 @@ function testUserDelete() {
   describe('invalid credentials', () => {
     it('should return 401 ( bad email )', (done) => {
       reqs.user
-        .delete({ userId: auth.user.id, ...userData, email: 'invalid@mail.com' })
+        .delete({ userId: auth.account.id, ...userData, email: 'invalid@mail.com' })
         .then((res) => {
           expect(res.status).to.be.eq(httpStatus.UNAUTHORIZED);
           done();
@@ -393,7 +393,7 @@ function testUserDelete() {
     });
     it('should return 401 ( use access token instead of email & password )', (done) => {
       reqs.user
-        .delete({ userId: auth.user.id, accessToken: auth.access })
+        .delete({ userId: auth.account.id, accessToken: auth.access })
         .then((res) => {
           expect(res.status).to.be.eq(httpStatus.UNAUTHORIZED);
           done();
@@ -402,7 +402,7 @@ function testUserDelete() {
     });
     it('should return 401 ( bad password )', (done) => {
       reqs.user
-        .delete({ userId: auth.user.id, ...userData, password: 'invalid' })
+        .delete({ userId: auth.account.id, ...userData, password: 'invalid' })
         .then((res) => {
           expect(res.status).to.be.eq(httpStatus.UNAUTHORIZED);
           done();
@@ -411,7 +411,7 @@ function testUserDelete() {
     });
     it('should return 401 ( no auth )', (done) => {
       reqs.user
-        .delete({ userId: auth.user.id })
+        .delete({ userId: auth.account.id })
         .then((res) => {
           expect(res.status).to.be.eq(httpStatus.UNAUTHORIZED);
           done();
