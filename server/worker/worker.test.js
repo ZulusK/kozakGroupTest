@@ -6,7 +6,10 @@ const mongoose = require('mongoose');
 const { userData, workerData } = require('../tests/validData');
 const { testSuitsForWorker, defaultTestsForQueries } = require('../tests/testQueries');
 const testTools = require('../tests/tools');
+const faker = require('faker');
 const _ = require('lodash');
+const helpers = require('../helpers');
+const dbFiller=require('../helpers/dbFiller')
 
 const ObjectId = mongoose.Types.ObjectId;
 const expect = chai.expect;
@@ -51,16 +54,19 @@ describe('## Worker APIs', () => {
         done();
       })
       .catch(done);
-  });
+  });  
   after('clean DB', testTools.cleanup);
-  //   describe('# POST /api/workers', testWorkerCreation);
-  //   describe('# PUT /api/workers/:id', testWorkerUpdate);
-  //   describe('# GET /api/workers/:id', testWorkerGetById);
-  //   describe('# DELETE /api/workers/:id', testWorkerDelete);
+  describe('# POST /api/workers', testWorkerCreation);
+  describe('# PUT /api/workers/:id', testWorkerUpdate);
+  describe('# GET /api/workers/:id', testWorkerGetById);
+  describe('# DELETE /api/workers/:id', testWorkerDelete);
   describe('# GET /api/workers', testWorkerList);
 });
 
 function testWorkerCreation() {
+    after('clear workers db',(done)=>{
+        dbFiller.clearWorkerDB().then(()=>done()).catch(done)
+    })
   describe('valid data', () => {
     it('should create a new user (valid info)', (done) => {
       reqs.worker
@@ -94,6 +100,9 @@ function testWorkerCreation() {
   expects.runTestCases({ testData: testSuitsForWorker, makeReq: runTestCaseCreation });
 }
 function testWorkerUpdate() {
+    after('clear workers db',(done)=>{
+        dbFiller.clearWorkerDB().then(()=>done()).catch(done)
+    })
   let worker = {
     id: null
   };
@@ -172,6 +181,9 @@ function testWorkerUpdate() {
   });
 }
 function testWorkerGetById() {
+    after('clear workers db',(done)=>{
+        dbFiller.clearWorkerDB().then(()=>done()).catch(done)
+    })
   let worker = {
     id: null
   };
@@ -237,6 +249,9 @@ function testWorkerGetById() {
   });
 }
 function testWorkerDelete() {
+    after('clear workers db',(done)=>{
+        dbFiller.clearWorkerDB().then(()=>done()).catch(done)
+    })
   let worker = {
     id: null
   };
@@ -316,32 +331,41 @@ function testWorkerDelete() {
   });
 }
 function testWorkerList() {
+    after('clear workers db',(done)=>{
+        dbFiller.clearWorkerDB().then(()=>done()).catch(done)
+    })
   const NUM_OF_WORKERS = 20;
-  let workers = [];
+  const workers = [];
   before(`create ${NUM_OF_WORKERS} workers`, (done) => {
-    Promise.all(
-      Array.from({ length: NUM_OF_WORKERS }, () => reqs.worker.create({ data: workerData, accessToken: env.user.access }))
-    )
+    const data = Array.from({ length: NUM_OF_WORKERS }, () => ({
+      ...workerData,
+      fullname: workerData.fullname+` ${faker.name.firstName()}`,
+      salary: faker.commerce.price(),
+      gender: Math.random() > 0.5 ? 'male' : 'female',
+      position: faker.name.jobTitle()
+    }));
+    Promise.all(data.map(d => reqs.worker.create({ data: d, accessToken: env.user.access })))
       .then((results) => {
-        results.forEach((e) => {
-          expect(e.status).to.be.eq(httpStatus.OK);
+        results.forEach((e, i) => {
+          if (e.status === httpStatus.OK) {
+            workers.push(e.body);
+          }
         });
-        workers = results.map(r => r.body);
         done();
       })
       .catch(done);
-  });  
+  });
   describe('use query options', () => {
     defaultTestsForQueries.forEach((ts) => {
       it(`should return ${ts.expectedCode}, ( ${JSON.stringify(ts.query)} )`, (done) => {
         reqs.worker
           .get({ query: ts.query, accessToken: env.user.access })
-          .then((res) => {            
+          .then((res) => {
             expect(res.status).to.be.eq(ts.expectedCode);
             if (ts.expectedCode === httpStatus.OK) {
               expects.expectPaginatedBody({
                 body: res.body,
-                testForItems: item => expects.worker.expectWorker(item, {}),
+                testForItems: item => expects.worker.expectWorker(item),
                 query: ts.query,
                 total: workers.length
               });
@@ -352,9 +376,86 @@ function testWorkerList() {
       });
     });
   });
-  describe('use custom query',()=>{
-      describe('test search by fullname')
-  })
+  describe('use custom query', () => {
+    describe('test search by fullname', () => {
+      it('should return 200', (done) => {
+        const nameToSearch = workers[0].fullname.split(' ')[0];
+        const regexToSearch = helpers.searchQueryBuilder.buildContainsWordsQuery(nameToSearch);
+        const expectedWorkers = _.filter(workers, w => regexToSearch.test(w.fullname));
+        expect(expectedWorkers).to.have.length.at.least(1);
+        reqs.worker
+          .get({ query: { fullname: nameToSearch }, accessToken: env.user.access })
+          .then((res) => {
+            expect(res.status).to.be.eq(httpStatus.OK);
+            expects.expectPaginatedBody({
+              body: res.body,
+              testForItems: item => expects.worker.expectWorker(item),
+              total: expectedWorkers.length
+            });
+            done();
+          })
+          .catch(done);
+      });
+    });
+    describe('test search by salary', () => {
+      it('should return 200', (done) => {
+        const salaryToSearch = workers[0].salary;
+        const expectedWorkers = _.filter(workers, w => Math.abs(w.salary - salaryToSearch) < 1e-6);
+        expect(expectedWorkers).to.have.length.at.least(1);
+        reqs.worker
+          .get({ query: { salary: salaryToSearch }, accessToken: env.user.access })
+          .then((res) => {
+            expect(res.status).to.be.eq(httpStatus.OK);
+            expects.expectPaginatedBody({
+              body: res.body,
+              testForItems: item => expects.worker.expectWorker(item),
+              total: expectedWorkers.length
+            });
+            done();
+          })
+          .catch(done);
+      });
+    });
+    describe('test search by gender', () => {
+      it('should return 200', (done) => {
+        const genderToSearch = 'female';
+        const expectedWorkers = _.filter(workers, w => w.gender === genderToSearch);
+        expect(expectedWorkers).to.have.length.at.least(1);
+        reqs.worker
+          .get({ query: { gender: genderToSearch }, accessToken: env.user.access })
+          .then((res) => {
+            expect(res.status).to.be.eq(httpStatus.OK);
+            expects.expectPaginatedBody({
+              body: res.body,
+              testForItems: item => expects.worker.expectWorker(item),
+              total: expectedWorkers.length
+            });
+            done();
+          })
+          .catch(done);
+      });
+    });
+    describe('test search by position', () => {
+      it('should return 200', (done) => {
+        const positionToSearch = workers[0].position;
+        const regexToSearch = helpers.searchQueryBuilder.buildContainsFullQuery(positionToSearch);
+        const expectedWorkers = _.filter(workers, w => regexToSearch.test(w.position));
+        expect(expectedWorkers).to.have.length.at.least(1);
+        reqs.worker
+          .get({ query: { position: positionToSearch }, accessToken: env.user.access })
+          .then((res) => {
+            expect(res.status).to.be.eq(httpStatus.OK);
+            expects.expectPaginatedBody({
+              body: res.body,
+              testForItems: item => expects.worker.expectWorker(item),
+              total: expectedWorkers.length
+            });
+            done();
+          })
+          .catch(done);
+      });
+    });
+  });
 }
 function runTestCaseCreation(testCase, done) {
   return reqs.worker

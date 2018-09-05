@@ -72,7 +72,7 @@ const update = async (req, res, next) => {
 const searchQueryList = [
   {
     path: 'fullname',
-    type: helpers.searchQueryBuilder.fieldTypes.CONTAINS
+    type: helpers.searchQueryBuilder.fieldTypes.CONTAINS_WORDS
   },
   {
     path: 'salary',
@@ -84,7 +84,7 @@ const searchQueryList = [
   },
   {
     path: 'position',
-    type: helpers.searchQueryBuilder.fieldTypes.CONTAINS
+    type: helpers.searchQueryBuilder.fieldTypes.CONTAINS_FULL
   }
 ];
 

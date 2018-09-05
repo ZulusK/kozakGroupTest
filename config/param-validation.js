@@ -79,12 +79,12 @@ exports.creatWorker = {
       .trim()
       .min(2)
       .max(40)
-      .regex(/^[a-zA-Z ]*$/)
+      .regex(/^[a-zA-Z. ]*$/)
       .required(),
     position: Joi.string()
       .trim()
       .min(2)
-      .max(20)
+      .max(40)
       .required(),
     salary: Joi.number()
       .min(0)
@@ -105,12 +105,12 @@ exports.updateWorker = {
       .trim()
       .min(2)
       .max(40)
-      .regex(/^[a-zA-Z ]*$/)
+      .regex(/^[a-zA-Z. ]*$/)
       .required(),
     position: Joi.string()
       .trim()
       .min(2)
-      .max(20)
+      .max(40)
       .required(),
     salary: Joi.number()
       .min(0)
@@ -120,6 +120,16 @@ exports.updateWorker = {
 // GET /api/workers
 exports.listWorkers = {
   query: {
-    ...DEFAULT_GET_QUERY
+    ...DEFAULT_GET_QUERY,
+    fullname: Joi.string()
+      .trim()
+      .max(40),
+    position: Joi.string()
+      .trim()
+      .max(40),
+    salary: Joi.number().min(0),
+    gender: Joi.string()
+      .trim()
+      .valid('male', 'female')
   }
 };
