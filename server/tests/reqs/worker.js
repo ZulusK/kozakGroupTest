@@ -4,7 +4,7 @@ const queryString = require('query-string');
 
 module.exports = {
   get: ({ accessToken, query = {} }) => request(app)
-    .get(`/api/workers${queryString.stringify(query)}`)
+    .get(`/api/workers?${queryString.stringify(query)}`)
     .set('Authorization', `bearer ${accessToken}`),
   getById: ({ accessToken, workerId }) => request(app)
     .get(`/api/workers/${workerId}`)

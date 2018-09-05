@@ -4,8 +4,9 @@ const reqs = require('../tests/reqs');
 const expects = require('../tests/expects');
 const mongoose = require('mongoose');
 const { userData, workerData } = require('../tests/validData');
-const { testSuitsForWorker } = require('../tests/testQueries');
+const { testSuitsForWorker, defaultTestsForQueries } = require('../tests/testQueries');
 const testTools = require('../tests/tools');
+const _ = require('lodash');
 
 const ObjectId = mongoose.Types.ObjectId;
 const expect = chai.expect;
@@ -29,7 +30,6 @@ const env = {
     accessExpiredIn: null
   }
 };
-
 describe('## Worker APIs', () => {
   before('clean DB', testTools.cleanup);
   before('create user', (done) => {
@@ -53,11 +53,13 @@ describe('## Worker APIs', () => {
       .catch(done);
   });
   after('clean DB', testTools.cleanup);
-  describe('# POST /api/workers', testWorkerCreation);
-  describe('# PUT /api/workers/:id', testWorkerUpdate);
-  describe('# GET /api/workers/:id', testWorkerGetById);
-  describe('# DELETE /api/workers/:id', testWorkerDelete);
+  //   describe('# POST /api/workers', testWorkerCreation);
+  //   describe('# PUT /api/workers/:id', testWorkerUpdate);
+  //   describe('# GET /api/workers/:id', testWorkerGetById);
+  //   describe('# DELETE /api/workers/:id', testWorkerDelete);
+  describe('# GET /api/workers', testWorkerList);
 });
+
 function testWorkerCreation() {
   describe('valid data', () => {
     it('should create a new user (valid info)', (done) => {
@@ -310,6 +312,44 @@ function testWorkerDelete() {
           done();
         })
         .catch(done);
+    });
+  });
+}
+function testWorkerList() {
+  const NUM_OF_WORKERS = 20;
+  let workers = [];
+  before(`create ${NUM_OF_WORKERS} workers`, (done) => {
+    Promise.all(
+      Array.from({ length: NUM_OF_WORKERS }, () => reqs.worker.create({ data: workerData, accessToken: env.user.access }))
+    )
+      .then((results) => {
+        results.forEach((e) => {
+          expect(e.status).to.be.eq(httpStatus.OK);
+        });
+        workers = results.map(r => r.body);
+        done();
+      })
+      .catch(done);
+  });  
+  describe('use query options', () => {
+    defaultTestsForQueries.forEach((ts) => {
+      it(`should return ${ts.expectedCode}, ( ${JSON.stringify(ts.query)} )`, (done) => {
+        reqs.worker
+          .get({ query: ts.query, accessToken: env.user.access })
+          .then((res) => {            
+            expect(res.status).to.be.eq(ts.expectedCode);
+            if (ts.expectedCode === httpStatus.OK) {
+              expects.expectPaginatedBody({
+                body: res.body,
+                testForItems: item => expects.worker.expectWorker(item, {}),
+                query: ts.query,
+                total: workers.length
+              });
+            }
+            done();
+          })
+          .catch(done);
+      });
     });
   });
 }
