@@ -1,0 +1,35 @@
+language: node_js
+node_js:
+  - node
+sudo: false
+notifications:
+  email:
+    on_success: never
+    on_failure: never
+install:
+  - npm install -g codecov
+before_script:
+  - mongo mydb_test --eval 'db.createUser({user:"app",pwd:"123456",roles:["readWrite"]});'
+script:
+  - npm run test:coverage
+  - codecov
+after_success:
+  - bash <(curl -s https://codecov.io/bash) -e TRAVIS_NODE_VERSION
+services:
+  - mongodb
+cache:
+  directories:
+    - node_modules
+env:
+  - JWT_SECRET_REFRESH_USER=tili-tili-trali-vali
+  - JWT_SECRET_ACCESS_USER=HelloKittyHelloKitty
+  - NODE_ENV=test
+  - MONGO_USER=app
+  - MONGO_PSW=123456
+deploy:
+  provider: heroku
+  strategy: git
+  app: kozak-group-test
+  on: master
+  api_key:
+    secure: JuoNYH/u1TYRzPdawLAta/PtbwgBvv2TgEqgTEm2HMvG6HxLsNhkLpxokMPQzYYU8R046LKFjljiunNCdf9jtD3fI1EdE/YafhOkEmHfMo2Ojclr3t1CCl7xy9SwF6tDxsDSp3X3irciSdla+3TkZBNS5Bb4iHBw0jIQNmRvVTONAGIQ+mDpcA66bhKPyY5PrCciJRQHOoRbk4P4+ziWkOBA9Kz552TYxqL26/mbs9MWQ8DmGX5G2LWhs5KzXGnokwQiGFBUnuqbOHlxbhmwFOX10Vz34PBtgESYecZJVIyJhXR0yXDuovMPKoo/fY4cbgjjcwlPwI3Cc4qA0pSwLf6Amh4V7Xuh3EtE6FB2L+GwKf7fIak6AfmJ5qGBYPkjtLJPwlhNJOC+PJdPYvr62oD2f0koOQzu93wzOc4Sx9m/NkiZsP4NjPH9nXJDPzyNPUV2wKNeK7W35Eg/HXbobsFdhAPpOj5bQtDAH98knbKFKxIJnabfW55ISZUiUsz4dtcIZ1YEMu6dGumxbirfYflvDUDfRI8K4hDZ4o0cCTw8AsRXDK5/QHjTlfLAmhOTYbabSC+2C1HQnm9dLth2cDDZmfyovAHCefQ4i4hXzqbOU4C3D0mbkdi1okjBM4ZHWAejxNPgMGAtnV3oQN1iVXrM4HDsF4WNszbfvUgKrXA=
