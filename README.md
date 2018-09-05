@@ -3,6 +3,7 @@
 | Master                                                                           | Develop                                                                       |
 | -------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
 | [![Build Status][travis-master]](https://travis-ci.org/ZulusK/kozakGroupTest-be) | [![Build Status][travis-dev]](https://travis-ci.org/ZulusK/kozakGroupTest-be) |
+| [![codecov][codecov-master]](https://codecov.io/gh/ZulusK/kozakGroupTest-be)     | [![codecov][codecov-dev]](https://codecov.io/gh/ZulusK/kozakGroupTest-be)     |
 
 ## Documentation
 
