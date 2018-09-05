@@ -8,6 +8,7 @@ notifications:
     on_failure: never
 install:
   - npm install -g codecov
+  - npm install -g cross-env
 before_script:
   - mongo testKozakGroup --eval 'db.createUser({user:"app",pwd:"123456",roles:["readWrite"]});'
 script:
