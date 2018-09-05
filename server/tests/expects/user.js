@@ -3,8 +3,8 @@ const all = require('./all');
 
 const expect = chai.expect;
 
-const publicFields = ['id', 'username', 'email', 'mobileNumber'];
-const privateFields = ['password'];
+const publicFields = ['id', 'username', 'email'];
+const privateFields = ['password', '_id', '__v'];
 
 const expectUser = (user, etaloneFields = {}) => {
   expect(user).to.be.an('object');

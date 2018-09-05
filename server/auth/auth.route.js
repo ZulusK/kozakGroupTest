@@ -14,4 +14,4 @@ authRoute.get('/token', auth.jwtUserRefresh, authCtrl.genAccessToken);
 authRoute.get('/check-access', auth.jwtUserAccess, authCtrl.check);
 authRoute.get('/check-refresh', auth.jwtUserRefresh, authCtrl.check);
 
-module.exports = authRoute;
+module.exports = router;

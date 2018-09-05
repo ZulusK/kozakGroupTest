@@ -3,7 +3,8 @@ const chai = require('chai'); // eslint-disable-line import/newline-after-import
 const reqs = require('../tests/reqs');
 const expects = require('../tests/expects');
 const mongoose = require('mongoose');
-const { userData, testSuitsForUser, testSuitsForUserPassword } = require('../tests/validData');
+const { userData } = require('../tests/validData');
+const { testSuitsForUser, testSuitsForUserPassword } = require('../tests/testQueries');
 const testTools = require('../tests/tools');
 
 const ObjectId = mongoose.Types.ObjectId;
@@ -29,24 +30,23 @@ describe('## User APIs', () => {
   before('clean DB', testTools.cleanup);
   after('clean DB', testTools.cleanup);
   describe('# POST /api/users', testUserCreation);
-  describe('# PUT /api/users/:id', testUserUpdate);
+  // describe('# PUT /api/users/:id', testUserUpdate);
 });
 
 function testUserCreation() {
   afterEach(testTools.cleanup);
   describe('valid data', () => {
     it('should create a new user (valid info) ', (done) => {
-      const etalone = copyUser(userData);
       reqs.user
         .create(userData)
         .then((res) => {
           expect(res.status).to.be.eq(httpStatus.OK);
-          expects.user.expect(res.body.user, etalone);
+          expects.user.expectUser(res.body.user, copyUser(userData));
           done();
         })
         .catch(done);
     });
-    it('should return 400, (used email info) ', (done) => {
+    it('should return 400, ( used email ) ', (done) => {
       reqs.user
         .create(userData)
         .then(() => reqs.user.create(userData))
@@ -85,7 +85,6 @@ function testUserCreation() {
         .catch(done);
     });
   });
-
   expects.runTestCases({ testData: testSuitsForUser, makeReq: runTestCaseCreation });
 }
 function testUserUpdate() {
@@ -234,14 +233,14 @@ function testUserUpdate() {
     });
   });
 }
-function runTestCaseCreation(tc, done) {
+function runTestCaseCreation(testCase, done) {
   return reqs.user
     .create({
       ...userData,
-      ...tc.data
+      ...testCase.data
     })
     .then((res) => {
-      expect(res.status).to.be.eq(tc.expectedCode);
+      expect(res.status).to.be.eq(testCase.expectedCode);
       done();
     });
 }

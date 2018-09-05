@@ -36,9 +36,16 @@ const get = (req, res) => res.json(req.$user.toJSON());
  */
 const create = async (req, res, next) => {
   try {
-    const user = new User({});
+    const user = new User({
+      username: req.body.username,
+      password: req.body.password,
+      email: req.body.email
+    });
     const savedUser = await user.save();
-    return res.json(savedUser.toJSON());
+    return res.json({
+      user: savedUser.toJSON(),
+      tokens: await savedUser.genAuthTokens()
+    });
   } catch (err) {
     return next(err);
   }
@@ -54,7 +61,7 @@ const create = async (req, res, next) => {
 const update = async (req, res, next) => {
   try {
     const user = req.$user;
-    helpers.updateObjectWithReq(req.body, user, []);
+    helpers.updateObjectWithReq(req.body, user, ['username', 'email']);
     const savedUser = await user.save();
     return res.json(savedUser.toJSON());
   } catch (err) {

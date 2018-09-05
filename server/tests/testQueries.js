@@ -70,43 +70,6 @@ const testSuitsForUser = {
       description: '> 20 symbols'
     }
   ],
-  mobileNumber: [
-    {
-      data: {
-        mobileNumber: null
-      },
-      expectedCode: httpStatus.BAD_REQUEST,
-      description: 'empty'
-    },
-    {
-      data: {
-        mobileNumber: '0500719822'
-      },
-      expectedCode: httpStatus.BAD_REQUEST,
-      description: 'no country code'
-    },
-    {
-      data: {
-        mobileNumber: '+10500719822'
-      },
-      expectedCode: httpStatus.BAD_REQUEST,
-      description: 'invalid country code'
-    },
-    {
-      data: {
-        mobileNumber: '+38050907198262'
-      },
-      expectedCode: httpStatus.BAD_REQUEST,
-      description: 'too match digits'
-    },
-    {
-      data: {
-        mobileNumber: '+38050071986'
-      },
-      expectedCode: httpStatus.BAD_REQUEST,
-      description: 'too little digits'
-    }
-  ],
   email: [
     {
       data: {
@@ -168,8 +131,47 @@ const testSuitsForUser = {
     }
   ]
 };
-
+const testSuitsForWorker = {
+  mobileNumber: [
+    {
+      data: {
+        mobileNumber: null
+      },
+      expectedCode: httpStatus.BAD_REQUEST,
+      description: 'empty'
+    },
+    {
+      data: {
+        mobileNumber: '0500719822'
+      },
+      expectedCode: httpStatus.BAD_REQUEST,
+      description: 'no country code'
+    },
+    {
+      data: {
+        mobileNumber: '+10500719822'
+      },
+      expectedCode: httpStatus.BAD_REQUEST,
+      description: 'invalid country code'
+    },
+    {
+      data: {
+        mobileNumber: '+38050907198262'
+      },
+      expectedCode: httpStatus.BAD_REQUEST,
+      description: 'too match digits'
+    },
+    {
+      data: {
+        mobileNumber: '+38050071986'
+      },
+      expectedCode: httpStatus.BAD_REQUEST,
+      description: 'too little digits'
+    }
+  ]
+};
 module.exports = {
+  testSuitsForWorker,
   testSuitsForUser,
   testSuitsForUserPassword
 };

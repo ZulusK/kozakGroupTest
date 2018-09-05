@@ -12,7 +12,12 @@ router.use('/users', userRouter);
 
 userRouter
   .route('/')
-  .get(auth.jwtUserAccess, userAccessControl.list, userCtrl.list)
+  .get(
+    auth.jwtUserAccess,
+    validate(paramValidation.listUsers),
+    userAccessControl.list,
+    userCtrl.list
+  )
   .post(validate(paramValidation.createUser), userCtrl.create);
 
 userRouter
@@ -35,4 +40,4 @@ userRouter.put(
 
 userRouter.param('userId', helpers.validators.validateId(userCtrl.load));
 
-module.exports = userRouter;
+module.exports = router;

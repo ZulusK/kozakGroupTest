@@ -16,6 +16,12 @@ module.exports = {
   create: data => request(app)
     .post('/api/users')
     .send(data),
+  checkAccessToken: accessToken => request(app)
+    .get('/api/auth/check-access')
+    .set('Authorization', `bearer ${accessToken}`),
+  checkRefreshToken: refreshToken => request(app)
+    .get('/api/auth/check-refresh')
+    .set('Authorization', `bearer ${refreshToken}`),
   createOrLogin: data => request(app)
     .post('/api/users')
     .send(data)

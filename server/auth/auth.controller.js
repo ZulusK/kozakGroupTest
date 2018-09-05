@@ -7,7 +7,7 @@ const login = (req, res) => res.json({
 const get = (req, res) => res.json(req.user.toJSON());
 
 const check = (req, res) => res.json({
-  status: true
+  status: 'ok'
 });
 
 const genAccessToken = (req, res) => res.json(req.user.genJWTAccessToken());

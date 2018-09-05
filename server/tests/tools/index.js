@@ -4,7 +4,7 @@ const dbFiller = require('../../helpers/dbFiller');
 function cleanup(done) {
   if (done) {
     dbFiller
-      .clear()
+      .clearAllDBs()
       .then(() => done())
       .catch(done);
   } else {

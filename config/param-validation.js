@@ -18,16 +18,22 @@ exports.createUser = {
       .isEmail()
       .required(),
     password: Joi.string()
-      .required()
       .trim()
       .min(8)
       .max(20)
-      .isPassword(),
+      .isPassword()
+      .required(),
     username: Joi.string()
       .trim()
       .min(2)
       .required()
       .max(30)
+  }
+};
+// GET /api/users
+exports.listUsers = {
+  query: {
+    ...DEFAULT_GET_QUERY
   }
 };
 // PUT /api/users/:id

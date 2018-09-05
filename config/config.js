@@ -37,7 +37,8 @@ const config = {
   log: require('./configs/log'),
   mongo: require('./configs/mongo'),
   acl: require('./configs/acl'),
-  resources: require('./configs/resources')
+  resources: require('./configs/resources'),
+  user: require('./configs/user')
 };
 
 module.exports = config;

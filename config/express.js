@@ -54,8 +54,8 @@ app.use('/api', routes);
 
 // if error is not an instanceOf APIError, convert it.
 app.use((err, req, res, next) => {
-  // console.error(err);
-  next(helpers.normalizeError(err));
+  // console.log(err);
+  next(helpers.errorConvertor.normalizeError(err));
 });
 
 // catch 404 and forward to error handler

@@ -28,7 +28,7 @@ function PasswordExtension(joi) {
           if (!/.*[!@#$%^&*].*/.test(value)) {
             return this.createError('string.noSpecial', { value }, state, options);
           }
-          if (!config.validation.passwordRegex.test(value)) {
+          if (!config.user.passwordRegex.test(value)) {
             return this.createError('string.invalid', { value }, state, options);
           }
           return value;

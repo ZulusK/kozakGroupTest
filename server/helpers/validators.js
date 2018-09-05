@@ -1,4 +1,4 @@
-const { ObjectId } = require('mongoose').Types;
+const ObjectId = require('mongoose').Types.ObjectId;
 const APIError = require('./APIError');
 const httpStatus = require('http-status');
 
