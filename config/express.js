@@ -50,9 +50,9 @@ if (config.log.express) {
   );
 }
 app.use(express.static(config.pathToPublicDir, config.isProduction ? { maxAge: '10h' } : null));
-app.get('*', (req, res) => res.sendFile(config.pathToSPA));
 // mount all routes on /api path
 app.use('/api', routes);
+app.get('*', (req, res) => res.sendFile(config.pathToSPA));
 
 // if error is not an instanceOf APIError, convert it.
 app.use((err, req, res, next) => {
