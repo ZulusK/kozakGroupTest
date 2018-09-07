@@ -1,5 +1,5 @@
 require('dotenv').config();
-
+const path = require('path');
 const Joi = require('joi');
 
 // define validation for all the env vars
@@ -30,6 +30,8 @@ if (error) {
 const config = {
   env: envVars.NODE_ENV,
   isProduction: envVars.IS_PROD,
+  pathToSPA: path.join(__dirname, '../public/index.html'),
+  pathToPublicDir: path.join(__dirname, '../public'),
   port: envVars.PORT,
   host: envVars.HOST,
   /* eslint-disable global-require */
