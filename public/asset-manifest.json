@@ -1,9 +1,9 @@
 {
   "main.css": "static/css/styles.css",
   "main.css.map": "static/css/styles.css.map",
-  "main.js": "static/js/main.06dbeef1.js",
-  "main.js.map": "static/js/main.06dbeef1.js.map",
-  "static/media/box.sass": "static/media/box.66ce0961.sass",
+  "main.js": "static/js/main.53f38c3f.js",
+  "main.js.map": "static/js/main.53f38c3f.js.map",
+  "static/media/bulma.sass": "static/media/bulma.790759d4.sass",
   "static/media/card.sass": "static/media/card.f86ae658.sass",
   "static/media/container.sass": "static/media/container.690b1277.sass",
   "static/media/content.sass": "static/media/content.78218652.sass",
@@ -11,8 +11,5 @@
   "static/media/hero.sass": "static/media/hero.d3f66773.sass",
   "static/media/image.sass": "static/media/image.bab4f4e4.sass",
   "static/media/media.sass": "static/media/media.35a29c39.sass",
-  "static/media/notification.eot": "static/media/notification.c0d3c94c.eot",
-  "static/media/notification.svg?s3g3t9": "static/media/notification.5bee74ca.svg",
-  "static/media/notification.ttf?s3g3t9": "static/media/notification.0b4ac1dc.ttf",
-  "static/media/notification.woff?s3g3t9": "static/media/notification.651771e1.woff"
+  "static/media/table.sass": "static/media/table.dfc189a1.sass"
 }
