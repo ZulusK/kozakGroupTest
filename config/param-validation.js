@@ -109,9 +109,7 @@ exports.updateWorker = {
       .trim()
       .min(2)
       .max(40),
-    salary: Joi.number()
-      .min(0)
-      .required()
+    salary: Joi.number().min(0)
   }
 };
 // GET /api/workers
