@@ -1,15 +1,6 @@
 {
   "main.css": "static/css/styles.css",
   "main.css.map": "static/css/styles.css.map",
-  "main.js": "static/js/main.53f38c3f.js",
-  "main.js.map": "static/js/main.53f38c3f.js.map",
-  "static/media/bulma.sass": "static/media/bulma.790759d4.sass",
-  "static/media/card.sass": "static/media/card.f86ae658.sass",
-  "static/media/container.sass": "static/media/container.690b1277.sass",
-  "static/media/content.sass": "static/media/content.78218652.sass",
-  "static/media/heading.sass": "static/media/heading.cb7a758c.sass",
-  "static/media/hero.sass": "static/media/hero.d3f66773.sass",
-  "static/media/image.sass": "static/media/image.bab4f4e4.sass",
-  "static/media/media.sass": "static/media/media.35a29c39.sass",
-  "static/media/table.sass": "static/media/table.dfc189a1.sass"
+  "main.js": "static/js/main.b1ea5d72.js",
+  "main.js.map": "static/js/main.b1ea5d72.js.map"
 }
