@@ -104,13 +104,11 @@ exports.updateWorker = {
       .trim()
       .min(2)
       .max(40)
-      .regex(/^[a-zA-Z. ]*$/)
-      .required(),
+      .regex(/^[a-zA-Z. ]*$/),
     position: Joi.string()
       .trim()
       .min(2)
-      .max(40)
-      .required(),
+      .max(40),
     salary: Joi.number()
       .min(0)
       .required()
